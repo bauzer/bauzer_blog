@@ -1,13 +1,15 @@
-baseurl = "https://blog.bauzer.net/"
+baseurl = "https://bauzer.github.io/"
 title = "bauzer log"
 languageCode = "ja"
 author = "bauzer"
 contentdir = "content"
 layoutdir = "layouts"
 publishdir = "public"
+copyright = "bauzer"
 canonifyurls = true
 
 [params]
-  logo      = "/images/logo.jpg"
+  logo      = "/images/logo.png"
   twitter   = "https://twitter.com/BAUZERMETAL"
   github    = "https://github.com/bauzer/"
+  email     = "bauzerboh@gmail.com"
