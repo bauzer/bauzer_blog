@@ -1,0 +1,13 @@
+baseurl = "https://blog.bauzer.net/"
+title = "bauzer log"
+languageCode = "ja"
+author = "bauzer"
+contentdir = "content"
+layoutdir = "layouts"
+publishdir = "public"
+canonifyurls = true
+
+[params]
+  logo      = "/images/logo.jpg"
+  twitter   = "https://twitter.com/BAUZERMETAL"
+  github    = "https://github.com/bauzer/"
