@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="//fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<link rel="stylesheet" href="https://bauzer.github.io/css/normalize.css">
+<link rel="stylesheet" href="https://bauzer.github.io/css/skeleton.css">
+<link rel="stylesheet" href="https://bauzer.github.io/css/custom.css">
+<link rel="alternate" href="https://bauzer.github.io/index.xml" type="application/rss+xml" title="bauzer log">
+<title>正しさについて考えさせられた - bauzer log</title>
+</head>
+<body>
+
+<div class="container">
+
+	<header role="banner">
+		<div class="header-logo">
+			<a href="https://bauzer.github.io/"><img src="https://bauzer.github.io/images/logo.png" width="60" height="60" alt="bauzer log"></a>
+		</div>
+		
+	</header>
+
+
+	<main role="main">
+		<article itemscope itemtype="http://schema.org/BlogPosting">
+			<h1 class="entry-title" itemprop="headline">正しさについて考えさせられた</h1>
+			<span class="entry-meta"><time itemprop="datePublished" datetime="2016-11-24">November 24, 2016</time></span>
+			<section itemprop="entry-text">
+				
+
+<h3 id="ことのはじまり">ことのはじまり</h3>
+
+<p>職場で偉い人と雑談してる時に</p>
+
+<blockquote>
+<p>世の中わりと適当でもやっていけるんだから、あまりカツカツするのもアレな感じでよくないのかもしれないねえ</p>
+</blockquote>
+
+<p>という話がありました。</p>
+
+<p>多分に共感できるところがあって「ですよね～」なんて相槌を打ってたらとあるソースコードを見せられまして……</p>
+
+<h3 id="とあるソースコード">とあるソースコード</h3>
+
+<p>それはクライアントからソケットでデータを受け取ってゴニョゴニョするC言語で実装されたプログラムでした。</p>
+
+<p>仕様は聞かずコードを眺めているとrecv(2)の返り値が期待値と異なっていた場合はロスト扱いするという実装です。</p>
+
+<p>微妙な空白の時間が生まれました。</p>
+
+<p>recvは確か受け取ったバイト数が返り値だから0になるか-1(error)になるまで呼び出さないといけなかったんじゃ…などと遠く消えそうな記憶を辿りよせるも不安だったので<a href="https://linuxjm.osdn.jp/html/LDP_man-pages/man2/recv.2.html">Man page of RECV</a>を確認しました。</p>
+
+<blockquote>
+<p>recv(), recvfrom(), recvmsg() コールは、 ソケットからメッセージを受け取るのに使用される。 これらはコネクションレス型のソケットにも接続指向</p>
+</blockquote>
+
+<p>中略</p>
+
+<blockquote>
+<p>これらの三つのシステムコールはいずれも、成功した場合にはメッセージの長さを返す。</p>
+</blockquote>
+
+<p>中略</p>
+
+<blockquote>
+<p>ソケットに受け取るメッセージが存在しなかった場合、 受信用のコールはメッセージが到着するまで待つ。</p>
+</blockquote>
+
+<p>記憶は正しかったようです。</p>
+
+<p>これで上手く動いているのか確認したところ、動いてはいるけどロストも多いそうだよとおっしゃっていました。</p>
+
+<h3 id="正しさとは何か">正しさとは何か</h3>
+
+<p>ロストを許容するというのが仕様制限として謳われているため、ロストの原因を如何を問わずロストはロストなのです。これは仕様制限としているのだから問題ない。ロストの多寡が問題視されていないという現状も含めこれでよいということでした。</p>
+
+<p>この事例が示唆しているのは、実装として間違っていたとしてもその正しさを決めるのは別のレイヤにあるということです。言い換えれば、このプログラムが拾ってくる情報の価値がこのプログラムの正しさを定義する尺度なのです。</p>
+
+<h3 id="まとめのようなもの">まとめのようなもの</h3>
+
+<p>プログラマの端くれとしてはまったく腑に落ちない話で、プログラミング上の問題が発生しないコードを予算内に収めて書くことがプログラマとしてのあり方、正しさだと信じています。しかしその正しさも異なるレイヤで見れば必ずしも正しいとは限りません。悪く言えばいい加減な実装でも費用対効果があると判断されるのならそれでいいのだからプログラミング上の正しさなんてどうでもいいんだと強弁することもできます。</p>
+
+<p>しかし、もしロストが多いことが問題となった場合はどうでしょうか。ネットワーク上の問題でロストしているのか、プログラミング上の問題でロストしているのか分析する必要が出てくるかもしれません。その時、この実装には問題があると判断できるプログラマでありたいと思います。</p>
+
+			</section>
+		</article>
+	</main>
+
+
+	<footer role="contentinfo">
+		<div class="hr"></div>
+		<div class="footer-link">
+			<a href="mailto:bauzerboh@gmail.com" target="_blank">Email</a>
+			<a href="https://twitter.com/BAUZERMETAL" target="_blank">Twitter</a>
+			
+			<a href="https://github.com/bauzer/" target="_blank">GitHub</a>
+			
+		</div>
+		<div class="copyright">Copyright &copy; bauzer</div>
+	</footer>
+
+</div>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>

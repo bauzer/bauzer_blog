@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="//fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<link rel="stylesheet" href="https://bauzer.github.io/css/normalize.css">
+<link rel="stylesheet" href="https://bauzer.github.io/css/skeleton.css">
+<link rel="stylesheet" href="https://bauzer.github.io/css/custom.css">
+<link rel="alternate" href="https://bauzer.github.io/index.xml" type="application/rss+xml" title="bauzer log">
+<title>Hugo - Hosting on GitHub Pages - bauzer log</title>
+</head>
+<body>
+
+<div class="container">
+
+	<header role="banner">
+		<div class="header-logo">
+			<a href="https://bauzer.github.io/"><img src="https://bauzer.github.io/images/logo.png" width="60" height="60" alt="bauzer log"></a>
+		</div>
+		
+	</header>
+
+
+	<main role="main">
+		<article itemscope itemtype="http://schema.org/BlogPosting">
+			<h1 class="entry-title" itemprop="headline">Hugo - Hosting on GitHub Pages</h1>
+			<span class="entry-meta"><time itemprop="datePublished" datetime="2016-11-20">November 20, 2016</time></span>
+			<section itemprop="entry-text">
+				
+
+<h3 id="はじめに">はじめに</h3>
+
+<p>blogを<a href="https://ghost.org">ghost</a>で運用していたんですが、<a href="https://pages.github.com">GitHub Pages</a>でホスティングできることを小耳にはさみやってみることにしました。</p>
+
+<p><a href="https://pages.github.com">GitHub Pages</a>は<code>&lt;username&gt;.github.io</code>というリポジトリを作成してmasterブランチにhtmlファイルを配置すればよいだけというお手軽さです。ソース管理もできるしこれを使わない手はなさそうです。</p>
+
+<p>htmlファイルの生成はgolangだという理由で<a href="https://gohugo.io">Hugo</a>を使うことにしました。生成速度が速いとかエントリ数が増えても動作が軽いとか色々利点はあるようです。</p>
+
+<h3 id="githubブランチの作成">GitHubブランチの作成</h3>
+
+<p>2つのリポジトリを作成します。
+1. <a href="https://pages.github.com">GitHub Pages</a>用リポジトリ(<code>&lt;username&gt;.github.io</code>)
+1. blog更新用リポジトリ(<code>&lt;username_hugo</code>)</p>
+
+<p>blog更新用リポジトリでHugoを実行し、生成されたpublicディレクトリと<code>&lt;username&gt;.github.io</code>リポジトリを<code>git submodule</code>を使って連携させます。</p>
+
+<h3 id="道具の準備">道具の準備</h3>
+
+<p>Bash on Windows環境下にgolangとHugoをインストールします。</p>
+
+<h4 id="install-golang">Install golang</h4>
+
+<p>Bash on Windows環境でapt-getすると古いgolangがインストールされてしまいますので、公式から最新版をダウンロードしインストールします。</p>
+
+<pre><code class="language-shell">curl -L -O https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.7.3.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+export GOPATH=/usr/local/go
+</code></pre>
+
+<h4 id="install-hugo">Install Hugo</h4>
+
+<p>公式からパッケージをダウンロードしてインストールします。</p>
+
+<pre><code class="language-shell">curl -L -O https://github.com/spf13/hugo/releases/download/v0.17/hugo_0.17-64bit.deb
+sudo dpkg -i hugo_0.17-64bit.deb
+</code></pre>
+
+<h3 id="blogサイトの作成">blogサイトの作成</h3>
+
+<p>hugoコマンドを使って作成します。テーマは<a href="http://themes.gohugo.io">Hugo Themes Site</a>から選びます。ここでは<a href="https://github.com/rakuishi/hugo-zen">Hugo Zen</a>
+をインストールします。</p>
+
+<pre><code class="language-shell">hugo new site &lt;username&gt;_hugo
+cd &lt;username&gt;_hugo
+
+# install theme(hugo-zen)
+git clone https://github.com/rakuishi/hugo-zen.git themes/hugo-zen
+</code></pre>
+
+<h3 id="リポジトリの更新">リポジトリの更新</h3>
+
+<p>ひとまずリポジトリを更新し、<a href="https://pages.github.com">GitHub Pages</a>用リポジトリ(<code>&lt;username&gt;.github.io</code>)とsubmoduleで連携させます。</p>
+
+<pre><code># add remote
+git init
+git add .
+git commit -m ‘First commit.’
+git remote add origin https://github.com/&lt;username&gt;/&lt;username&gt;_hugo.git
+
+git submodule add -b master https://github.com/&lt;username&gt;/&lt;username&gt;_hugo.git public
+
+git push origin master
+</code></pre>
+
+<h3 id="blogエントリの作成">blogエントリの作成</h3>
+
+<p>hugoコマンドで作成し、mdファイルを編集します。</p>
+
+<pre><code class="language-shell">hugo new hello.md
+</code></pre>
+
+<h3 id="ローカルサーバーでの確認">ローカルサーバーでの確認</h3>
+
+<pre><code class="language-shell">hugo server --theme=hugo-zen --buildDrafts --watch
+</code></pre>
+
+<h3 id="github-pagesへデプロイ">GitHub Pagesへデプロイ</h3>
+
+<p>デプロイ用のシェルスクリプトを作成し、実行します。</p>
+
+<pre><code class="language-shell">cat &lt;&lt;'_EOT_' &gt; deploy.sh
+
+#!/bin/bash
+
+echo -e &quot;\033[0;32mDeploying updates to GitHub...\033[0m&quot;
+
+# Build the project.
+hugo -t hugo-zen # if using a theme, replace by `hugo -t &lt;yourtheme&gt;`
+
+# Go To Public folder
+cd public
+# Add changes to git.
+git add -A
+
+# Commit changes.
+msg=&quot;rebuilding site `date`&quot;
+if [ $# -eq 1 ]
+  then msg=&quot;$1&quot;
+fi
+git commit -m &quot;$msg&quot;
+
+# Push source and build repos.
+git push origin master
+
+# Come Back
+cd ..
+_EOT_
+
+chmod +x deploy.sh
+</code></pre>
+
+<p>これで https://<username>.gihub.io/ に反映されました。</p>
+
+			</section>
+		</article>
+	</main>
+
+
+	<footer role="contentinfo">
+		<div class="hr"></div>
+		<div class="footer-link">
+			<a href="mailto:bauzerboh@gmail.com" target="_blank">Email</a>
+			<a href="https://twitter.com/BAUZERMETAL" target="_blank">Twitter</a>
+			
+			<a href="https://github.com/bauzer/" target="_blank">GitHub</a>
+			
+		</div>
+		<div class="copyright">Copyright &copy; bauzer</div>
+	</footer>
+
+</div>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>

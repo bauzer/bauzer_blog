@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>201611s on bauzer log</title>
+    <link>https://bauzer.github.io/201611/index.xml</link>
+    <description>Recent content in 201611s on bauzer log</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>bauzer</copyright>
+    <lastBuildDate>Thu, 24 Nov 2016 22:46:26 +0900</lastBuildDate>
+    <atom:link href="https://bauzer.github.io/201611/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>正しさについて考えさせられた</title>
+      <link>https://bauzer.github.io/201611/003/</link>
+      <pubDate>Thu, 24 Nov 2016 22:46:26 +0900</pubDate>
+      
+      <guid>https://bauzer.github.io/201611/003/</guid>
+      <description>
+
+&lt;h3 id=&#34;ことのはじまり&#34;&gt;ことのはじまり&lt;/h3&gt;
+
+&lt;p&gt;職場で偉い人と雑談してる時に&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;世の中わりと適当でもやっていけるんだから、あまりカツカツするのもアレな感じでよくないのかもしれないねえ&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;という話がありました。&lt;/p&gt;
+
+&lt;p&gt;多分に共感できるところがあって「ですよね～」なんて相槌を打ってたらとあるソースコードを見せられまして……&lt;/p&gt;
+
+&lt;h3 id=&#34;とあるソースコード&#34;&gt;とあるソースコード&lt;/h3&gt;
+
+&lt;p&gt;それはクライアントからソケットでデータを受け取ってゴニョゴニョするC言語で実装されたプログラムでした。&lt;/p&gt;
+
+&lt;p&gt;仕様は聞かずコードを眺めているとrecv(2)の返り値が期待値と異なっていた場合はロスト扱いするという実装です。&lt;/p&gt;
+
+&lt;p&gt;微妙な空白の時間が生まれました。&lt;/p&gt;
+
+&lt;p&gt;recvは確か受け取ったバイト数が返り値だから0になるか-1(error)になるまで呼び出さないといけなかったんじゃ…などと遠く消えそうな記憶を辿りよせるも不安だったので&lt;a href=&#34;https://linuxjm.osdn.jp/html/LDP_man-pages/man2/recv.2.html&#34;&gt;Man page of RECV&lt;/a&gt;を確認しました。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;recv(), recvfrom(), recvmsg() コールは、 ソケットからメッセージを受け取るのに使用される。 これらはコネクションレス型のソケットにも接続指向&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;中略&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;これらの三つのシステムコールはいずれも、成功した場合にはメッセージの長さを返す。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;中略&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;ソケットに受け取るメッセージが存在しなかった場合、 受信用のコールはメッセージが到着するまで待つ。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;記憶は正しかったようです。&lt;/p&gt;
+
+&lt;p&gt;これで上手く動いているのか確認したところ、動いてはいるけどロストも多いそうだよとおっしゃっていました。&lt;/p&gt;
+
+&lt;h3 id=&#34;正しさとは何か&#34;&gt;正しさとは何か&lt;/h3&gt;
+
+&lt;p&gt;ロストを許容するというのが仕様制限として謳われているため、ロストの原因を如何を問わずロストはロストなのです。これは仕様制限としているのだから問題ない。ロストの多寡が問題視されていないという現状も含めこれでよいということでした。&lt;/p&gt;
+
+&lt;p&gt;この事例が示唆しているのは、実装として間違っていたとしてもその正しさを決めるのは別のレイヤにあるということです。言い換えれば、このプログラムが拾ってくる情報の価値がこのプログラムの正しさを定義する尺度なのです。&lt;/p&gt;
+
+&lt;h3 id=&#34;まとめのようなもの&#34;&gt;まとめのようなもの&lt;/h3&gt;
+
+&lt;p&gt;プログラマの端くれとしてはまったく腑に落ちない話で、プログラミング上の問題が発生しないコードを予算内に収めて書くことがプログラマとしてのあり方、正しさだと信じています。しかしその正しさも異なるレイヤで見れば必ずしも正しいとは限りません。悪く言えばいい加減な実装でも費用対効果があると判断されるのならそれでいいのだからプログラミング上の正しさなんてどうでもいいんだと強弁することもできます。&lt;/p&gt;
+
+&lt;p&gt;しかし、もしロストが多いことが問題となった場合はどうでしょうか。ネットワーク上の問題でロストしているのか、プログラミング上の問題でロストしているのか分析する必要が出てくるかもしれません。その時、この実装には問題があると判断できるプログラマでありたいと思います。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CentOS7でvm.swappinessを設定</title>
+      <link>https://bauzer.github.io/201611/002/</link>
+      <pubDate>Sun, 20 Nov 2016 20:36:13 +0900</pubDate>
+      
+      <guid>https://bauzer.github.io/201611/002/</guid>
+      <description>&lt;p&gt;まずは現在の設定値を確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sudo sysctl vm.swappiness
+vm.swappiness = 30
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;CentOS6では&lt;code&gt;/etc/sysctl.conf&lt;/code&gt; に設定を保存してやればよかったのですが、CentOS7ではtunedでカーネルパラメータが上書きされます。&lt;/p&gt;
+
+&lt;p&gt;ということで、tunedでどのプロファイルが適用されているか確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sudo tuned-adm active
+Current active profile: virtual-guest
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;プロファイルの設定内容を確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sudo grep vm.swappiness /usr/lib/tuned/virtual-guest/tuned.conf
+vm.swappiness = 30
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;プロファイル&lt;code&gt;/usr/lib/tuned/virtual-guest/tuned.conf&lt;/code&gt;の&lt;code&gt;vm.swappiness&lt;/code&gt;を変更し、tunedを再起動します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sudo systemctl restart tuned
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;設定が反映されたか確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sudo sysctl vm.swappiness
+vm.swappiness = 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;無事反映できました。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Hugo - Hosting on GitHub Pages</title>
+      <link>https://bauzer.github.io/201611/001/</link>
+      <pubDate>Sun, 20 Nov 2016 13:09:03 +0900</pubDate>
+      
+      <guid>https://bauzer.github.io/201611/001/</guid>
+      <description>
+
+&lt;h3 id=&#34;はじめに&#34;&gt;はじめに&lt;/h3&gt;
+
+&lt;p&gt;blogを&lt;a href=&#34;https://ghost.org&#34;&gt;ghost&lt;/a&gt;で運用していたんですが、&lt;a href=&#34;https://pages.github.com&#34;&gt;GitHub Pages&lt;/a&gt;でホスティングできることを小耳にはさみやってみることにしました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://pages.github.com&#34;&gt;GitHub Pages&lt;/a&gt;は&lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;というリポジトリを作成してmasterブランチにhtmlファイルを配置すればよいだけというお手軽さです。ソース管理もできるしこれを使わない手はなさそうです。&lt;/p&gt;
+
+&lt;p&gt;htmlファイルの生成はgolangだという理由で&lt;a href=&#34;https://gohugo.io&#34;&gt;Hugo&lt;/a&gt;を使うことにしました。生成速度が速いとかエントリ数が増えても動作が軽いとか色々利点はあるようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;githubブランチの作成&#34;&gt;GitHubブランチの作成&lt;/h3&gt;
+
+&lt;p&gt;2つのリポジトリを作成します。
+1. &lt;a href=&#34;https://pages.github.com&#34;&gt;GitHub Pages&lt;/a&gt;用リポジトリ(&lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;)
+1. blog更新用リポジトリ(&lt;code&gt;&amp;lt;username_hugo&lt;/code&gt;)&lt;/p&gt;
+
+&lt;p&gt;blog更新用リポジトリでHugoを実行し、生成されたpublicディレクトリと&lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;リポジトリを&lt;code&gt;git submodule&lt;/code&gt;を使って連携させます。&lt;/p&gt;
+
+&lt;h3 id=&#34;道具の準備&#34;&gt;道具の準備&lt;/h3&gt;
+
+&lt;p&gt;Bash on Windows環境下にgolangとHugoをインストールします。&lt;/p&gt;
+
+&lt;h4 id=&#34;install-golang&#34;&gt;Install golang&lt;/h4&gt;
+
+&lt;p&gt;Bash on Windows環境でapt-getすると古いgolangがインストールされてしまいますので、公式から最新版をダウンロードしインストールします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;curl -L -O https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.7.3.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+export GOPATH=/usr/local/go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;install-hugo&#34;&gt;Install Hugo&lt;/h4&gt;
+
+&lt;p&gt;公式からパッケージをダウンロードしてインストールします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;curl -L -O https://github.com/spf13/hugo/releases/download/v0.17/hugo_0.17-64bit.deb
+sudo dpkg -i hugo_0.17-64bit.deb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;blogサイトの作成&#34;&gt;blogサイトの作成&lt;/h3&gt;
+
+&lt;p&gt;hugoコマンドを使って作成します。テーマは&lt;a href=&#34;http://themes.gohugo.io&#34;&gt;Hugo Themes Site&lt;/a&gt;から選びます。ここでは&lt;a href=&#34;https://github.com/rakuishi/hugo-zen&#34;&gt;Hugo Zen&lt;/a&gt;
+をインストールします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;hugo new site &amp;lt;username&amp;gt;_hugo
+cd &amp;lt;username&amp;gt;_hugo
+
+# install theme(hugo-zen)
+git clone https://github.com/rakuishi/hugo-zen.git themes/hugo-zen
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;リポジトリの更新&#34;&gt;リポジトリの更新&lt;/h3&gt;
+
+&lt;p&gt;ひとまずリポジトリを更新し、&lt;a href=&#34;https://pages.github.com&#34;&gt;GitHub Pages&lt;/a&gt;用リポジトリ(&lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;)とsubmoduleで連携させます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# add remote
+git init
+git add .
+git commit -m ‘First commit.’
+git remote add origin https://github.com/&amp;lt;username&amp;gt;/&amp;lt;username&amp;gt;_hugo.git
+
+git submodule add -b master https://github.com/&amp;lt;username&amp;gt;/&amp;lt;username&amp;gt;_hugo.git public
+
+git push origin master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;blogエントリの作成&#34;&gt;blogエントリの作成&lt;/h3&gt;
+
+&lt;p&gt;hugoコマンドで作成し、mdファイルを編集します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;hugo new hello.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;ローカルサーバーでの確認&#34;&gt;ローカルサーバーでの確認&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;hugo server --theme=hugo-zen --buildDrafts --watch
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;github-pagesへデプロイ&#34;&gt;GitHub Pagesへデプロイ&lt;/h3&gt;
+
+&lt;p&gt;デプロイ用のシェルスクリプトを作成し、実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;cat &amp;lt;&amp;lt;&#39;_EOT_&#39; &amp;gt; deploy.sh
+
+#!/bin/bash
+
+echo -e &amp;quot;\033[0;32mDeploying updates to GitHub...\033[0m&amp;quot;
+
+# Build the project.
+hugo -t hugo-zen # if using a theme, replace by `hugo -t &amp;lt;yourtheme&amp;gt;`
+
+# Go To Public folder
+cd public
+# Add changes to git.
+git add -A
+
+# Commit changes.
+msg=&amp;quot;rebuilding site `date`&amp;quot;
+if [ $# -eq 1 ]
+  then msg=&amp;quot;$1&amp;quot;
+fi
+git commit -m &amp;quot;$msg&amp;quot;
+
+# Push source and build repos.
+git push origin master
+
+# Come Back
+cd ..
+_EOT_
+
+chmod +x deploy.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで https://&lt;username&gt;.gihub.io/ に反映されました。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.18.1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="//fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<link rel="stylesheet" href="https://bauzer.github.io/css/normalize.css">
+<link rel="stylesheet" href="https://bauzer.github.io/css/skeleton.css">
+<link rel="stylesheet" href="https://bauzer.github.io/css/custom.css">
+<link rel="alternate" href="https://bauzer.github.io/index.xml" type="application/rss+xml" title="bauzer log">
+<title>CentOS7でvm.swappinessを設定 - bauzer log</title>
+</head>
+<body>
+
+<div class="container">
+
+	<header role="banner">
+		<div class="header-logo">
+			<a href="https://bauzer.github.io/"><img src="https://bauzer.github.io/images/logo.png" width="60" height="60" alt="bauzer log"></a>
+		</div>
+		
+	</header>
+
+
+	<main role="main">
+		<article itemscope itemtype="http://schema.org/BlogPosting">
+			<h1 class="entry-title" itemprop="headline">CentOS7でvm.swappinessを設定</h1>
+			<span class="entry-meta"><time itemprop="datePublished" datetime="2016-11-20">November 20, 2016</time></span>
+			<section itemprop="entry-text">
+				<p>まずは現在の設定値を確認します。</p>
+
+<pre><code class="language-shell">sudo sysctl vm.swappiness
+vm.swappiness = 30
+</code></pre>
+
+<p>CentOS6では<code>/etc/sysctl.conf</code> に設定を保存してやればよかったのですが、CentOS7ではtunedでカーネルパラメータが上書きされます。</p>
+
+<p>ということで、tunedでどのプロファイルが適用されているか確認します。</p>
+
+<pre><code class="language-shell">sudo tuned-adm active
+Current active profile: virtual-guest
+</code></pre>
+
+<p>プロファイルの設定内容を確認します。</p>
+
+<pre><code class="language-shell">sudo grep vm.swappiness /usr/lib/tuned/virtual-guest/tuned.conf
+vm.swappiness = 30
+</code></pre>
+
+<p>プロファイル<code>/usr/lib/tuned/virtual-guest/tuned.conf</code>の<code>vm.swappiness</code>を変更し、tunedを再起動します。</p>
+
+<pre><code class="language-shell">sudo systemctl restart tuned
+</code></pre>
+
+<p>設定が反映されたか確認します。</p>
+
+<pre><code class="language-shell">sudo sysctl vm.swappiness
+vm.swappiness = 1
+</code></pre>
+
+<p>無事反映できました。</p>
+
+			</section>
+		</article>
+	</main>
+
+
+	<footer role="contentinfo">
+		<div class="hr"></div>
+		<div class="footer-link">
+			<a href="mailto:bauzerboh@gmail.com" target="_blank">Email</a>
+			<a href="https://twitter.com/BAUZERMETAL" target="_blank">Twitter</a>
+			
+			<a href="https://github.com/bauzer/" target="_blank">GitHub</a>
+			
+		</div>
+		<div class="copyright">Copyright &copy; bauzer</div>
+	</footer>
+
+</div>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>

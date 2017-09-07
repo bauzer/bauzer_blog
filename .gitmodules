@@ -1,4 +1,3 @@
-[submodule "public"]
-	path = public
-	url = https://github.com/bauzer/bauzer.github.io.git
-	branch = master
+[submodule "themes/hugo-zen"]
+	path = themes/hugo-zen
+	url = https://github.com/rakuishi/hugo-zen
