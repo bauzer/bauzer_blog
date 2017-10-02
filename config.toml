@@ -7,6 +7,7 @@ layoutdir = "layouts"
 publishdir = "public"
 copyright = "bauzer"
 canonifyurls = true
+googleAnalytics = "UA-72251140-1"
 
 [params]
   logo      = "/images/logo.png"
